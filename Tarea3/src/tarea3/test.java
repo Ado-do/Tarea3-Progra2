@@ -1,6 +1,6 @@
 package tarea3;
 
-public class Tarea2 {
+public class test {
     public static void main(String[] args) {
         // 1: CocaCola, 2: Fanta, 3: Sprite.
 

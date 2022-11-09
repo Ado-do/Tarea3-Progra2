@@ -1,5 +1,7 @@
 package tarea3;
 
+import java.awt.*; 
+
 public class Comprador {
     private int vuelto = 0;
     private String saborBebido;
@@ -27,11 +29,14 @@ public class Comprador {
         }
         
     }
-    
     public int cuantoVuelto() {
         return vuelto;
     }
     public String queBebiste() {
         return saborBebido;
+    }
+    //! WIP
+    public void paint(Graphics g) {
+
     }
 }

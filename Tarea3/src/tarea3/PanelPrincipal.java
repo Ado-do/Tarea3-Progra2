@@ -1,6 +1,7 @@
 package tarea3;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
 public class PanelPrincipal extends JFrame {
     private Comprador com;

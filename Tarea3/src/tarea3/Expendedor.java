@@ -1,5 +1,8 @@
 package tarea3;
+
 import java.util.ArrayList;
+import tarea3.exceptions.*;
+import java.awt.*;
 
 public class Expendedor {
     private DepositoVuelto depVuelto;
@@ -35,9 +38,9 @@ public class Expendedor {
                 if (m.getValor() >= precio) {
                     // Pad numérico
                     switch (num) {
-                        case 1:     compra = depBebidas.get(0).getBebida(); break;
-                        case 2:     compra = depBebidas.get(1).getBebida(); break;
-                        case 3:     compra = depBebidas.get(2).getBebida(); break;
+                        case 1: compra = depBebidas.get(0).getBebida(); break;
+                        case 2: compra = depBebidas.get(1).getBebida(); break;
+                        case 3: compra = depBebidas.get(2).getBebida(); break;
                         default: {
                             compra = null;
                             throw new NoHayBebidaException("Elección inválida.");
@@ -73,5 +76,9 @@ public class Expendedor {
     }
     public Moneda getVuelto() {
         return depVuelto.getVuelto();
+    }
+    //! WIP
+    public void paint(Graphics g) {
+
     }
 }
