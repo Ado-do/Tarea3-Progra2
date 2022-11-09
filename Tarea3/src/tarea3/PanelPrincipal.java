@@ -3,7 +3,7 @@ package tarea3;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelPrincipal extends JFrame {
+public class PanelPrincipal extends JPanel {
     private Comprador com;
     private Expendedor exp;
 

@@ -1,8 +1,8 @@
 package tarea3;
 
 /* TO-DO LIST
- * - Separar las excepciones de el package tarea3 (package para excepciones)
- * - Organizar clases en packages
+ * - Abrir una ventana
+ * - Dibujar expendedor
  */
 
 public class Tarea3 {
