@@ -8,8 +8,8 @@ public class PanelPrincipal extends JPanel {
     private Expendedor exp;
 
     public PanelPrincipal () { 
-        exp = new Expendedor(69, 69); 
-        com = new Comprador(null, 69, null); 
+        // exp = new Expendedor(69, 69); 
+        // com = new Comprador(null, 69, null); 
         // this.setBackground(Color.white); // Importar alguna librería de color
     } 
     public void paint (Graphics g) {  // todo se dibuja a partir de este método 

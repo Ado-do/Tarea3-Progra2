@@ -5,10 +5,12 @@ import javax.swing.*;
 
 public class Ventana extends JFrame {
     public  JPanel panel;
+    
     public Ventana() {
         super();
         this.setTitle("Maquina Expendedora");
         this.setSize(1000,700);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new GridLayout());

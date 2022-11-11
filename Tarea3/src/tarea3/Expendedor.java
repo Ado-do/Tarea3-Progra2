@@ -7,11 +7,12 @@ import java.awt.*;
 public class Expendedor {
     private DepositoVuelto depVuelto;
     private ArrayList<DepositoBebida> depBebidas;
+    private Bebida depCompra;
     private int precio;
 
     public Expendedor(int cantBebidas, int precioUnico) {
         this.precio = precioUnico;       
-        this.depBebidas = new ArrayList<DepositoBebida>(3);
+        this.depBebidas = new ArrayList<DepositoBebida>(5);
 
         depBebidas.add(new DepositoBebida());
         depBebidas.add(new DepositoBebida());
@@ -24,7 +25,7 @@ public class Expendedor {
         }
         this.depVuelto = new DepositoVuelto();
     }
-    public Bebida comprarBebida(Moneda m, int num) {
+    public void comprarBebida(Moneda m, int num) {
         boolean devolverMoneda = false; // Flag para verificar si hay devolucion o no
         Bebida compra;
 
@@ -57,7 +58,8 @@ public class Expendedor {
                         if (m.getValor() > precio) {
                             depVuelto.generarVuelto(m.getValor() - precio);
                         }
-                        return compra; // Devolver bebida comprada
+                        // return compra; // Devolver bebida comprada
+                        this.depCompra = compra;
                     }
 
                 // En el caso de que no alcance la moneda
@@ -71,8 +73,11 @@ public class Expendedor {
         }
 
         if (devolverMoneda) depVuelto.guardarDevolucion(m); // Se guarda moneda para ser devuelta
-
-        return null;
+    }
+    public Bebida getBebida() {
+        Bebida aux = depCompra;
+        this.depCompra = null;
+        return aux;
     }
     public Moneda getVuelto() {
         return depVuelto.getVuelto();
