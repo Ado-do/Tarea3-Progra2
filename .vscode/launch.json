@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch grafica",
+            "request": "launch",
+            "mainClass": "tarea3.grafica",
+            "projectName": "Tarea3-Progra2_5c81b53e"
+        },
+        {
+            "type": "java",
             "name": "Launch test",
             "request": "launch",
             "mainClass": "tarea3.test",

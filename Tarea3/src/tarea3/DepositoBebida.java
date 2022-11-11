@@ -17,4 +17,8 @@ class DepositoBebida {
             return null;
         }
     }
+
+    public int cantBebidas() {
+        return dep.size();
+    }
 }
