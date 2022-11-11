@@ -12,9 +12,8 @@ public class Ventana extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new GridLayout());
-        this.setVisible(true);
     }
-    private void iniciarTodo() {
+    public void iniciarTodo() {
         colocarPaneles();
         colocarEtiquetas();
         colocarBotones();
@@ -26,9 +25,16 @@ public class Ventana extends JFrame {
     }
     private void colocarBotones() {
         JButton Pagar = new JButton();
+        Pagar.setText("hola");
+        Pagar.setBounds(10,80,1000,700);
         
     }
     private void colocarEtiquetas() {
+        JLabel Muro = new JLabel(new ImageIcon(""));
+        Muro.setBounds(10, 80, 1000, 700);
+        panel.add(Muro);
         
+
+
     }
 }
