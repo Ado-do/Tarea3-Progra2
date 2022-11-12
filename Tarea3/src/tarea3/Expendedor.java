@@ -5,35 +5,33 @@ import tarea3.exceptions.*;
 import java.awt.*;
 
 public class Expendedor {
-    private ArrayList<DepositoBebida> depBebidas;
-    private DepositoVuelto depVuelto;
     private int precio;
-    
-    private Bebida depCompra;
-    private ArrayList<Moneda> depMonedas;
-    private int capDeps;
+    private ArrayList<DepositoBebida> depBebidas;
+    private int capacidadDeps;
     private int[] seriesCont;
+    private Bebida depCompra;
+    private DepositoMoneda depMonedas;
+    private DepositoMoneda depVuelto;
+    
 
     public Expendedor(int cantBebidas, int precioUnico) {
         this.precio = precioUnico;
         this.depBebidas = new ArrayList<DepositoBebida>(3);
-        
         depBebidas.add(new DepositoBebida());
         depBebidas.add(new DepositoBebida());
         depBebidas.add(new DepositoBebida());
         
-        
-        this.seriesCont = new int[]{0,0,0};
+        this.seriesCont = new int[]{1000,2000,3000};
         for (int i = 0; i < cantBebidas; i++) {
-            depBebidas.get(0).addBebida(new CocaCola(100 + (seriesCont[0]++)));
-            depBebidas.get(1).addBebida(new Fanta(200 + (seriesCont[1]++)));
-            depBebidas.get(2).addBebida(new Sprite(300 + (seriesCont[2]++)));
+            depBebidas.get(0).addBebida(new CocaCola(seriesCont[0]++));
+            depBebidas.get(1).addBebida(new Fanta(seriesCont[1]++));
+            depBebidas.get(2).addBebida(new Sprite(seriesCont[2]++));
         }
         
         //* Nuevo, por enunciado
-        this.capDeps = cantBebidas;
-        this.depVuelto = new DepositoVuelto();
-        this.depMonedas = new ArrayList<Moneda>();
+        this.capacidadDeps = cantBebidas;
+        this.depVuelto = new DepositoMoneda();
+        this.depMonedas = new DepositoMoneda();
     }
     public void comprarBebida(Moneda m, int num) {  //* Modificado para compatibilizar con enunciado de la tarea3
         boolean devolverMoneda = false; // Flag para verificar si hay devolucion o no
@@ -69,11 +67,14 @@ public class Expendedor {
                     } else {
                         // Si la moneda tenia una valor mayor entonces se calcula vuelto
                         if (m.getValor() > precio) {
-                            depVuelto.generarVuelto(m.getValor() - precio);
+                            int vuelto = m.getValor() - precio;
+                            for (int i = 0; i < vuelto/100; i++) {
+                                depVuelto.addMoneda(new Moneda100());
+                            }
                         }
                         // * Guardar moneda y compra en deps
-                        this.depMonedas.add(m);
-                        this.depCompra = compra;
+                        depMonedas.addMoneda(m);
+                        depCompra = compra;
                     }
                 // En el caso de que no alcance la moneda
                 } else {
@@ -85,7 +86,7 @@ public class Expendedor {
             System.out.println(e.getMessage());
         }
 
-        if (devolverMoneda) depVuelto.guardarDevolucion(m); // Se guarda moneda para ser devuelta
+        if (devolverMoneda) depVuelto.addMoneda(m); // Se guarda moneda para ser devuelta
     }
     public Bebida getBebida() {
         Bebida aux = depCompra;
@@ -96,7 +97,7 @@ public class Expendedor {
         for (int i = 0; i < 3; i++) {
             DepositoBebida dep = depBebidas.get(i);
             if (dep.cantBebidas() == 0) {
-                for (int j = 0; j < capDeps; j++) {
+                for (int j = 0; j < capacidadDeps; j++) {
                     Bebida aux = null;
                     switch (i) {
                         case 0: aux = new CocaCola(seriesCont[0]++); break;
@@ -109,7 +110,7 @@ public class Expendedor {
         }
     }
     public Moneda getVuelto() {
-        return depVuelto.getVuelto();
+        return depVuelto.getMoneda();
     }
     //! WIP
     public void paint(Graphics g) {

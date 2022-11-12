@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 public class test {
     public static void main(String[] args) {
-
         ArrayList<Bebida> dep = new ArrayList<Bebida>();
         dep.add(null);
         dep.add(new CocaCola(123));
         System.out.println(dep);
-
     //     // 1: CocaCola, 2: Fanta, 3: Sprite.
 
     //     // Caso 1: Toma bebida y dice que tomó.
