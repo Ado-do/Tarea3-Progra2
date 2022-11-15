@@ -4,28 +4,23 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Ventana extends JFrame {
-    private Expendedor exp;
-    private Comprador comp;
-
     private JPanel panelPrincipal;
     
     public Ventana() {
-        super();
+        super("Tarea3");
 
-        exp = new Expendedor(5, 500);
-        comp = new Comprador(exp);
+        panelPrincipal = new PanelPrincipal();
+        this.getContentPane().add(panelPrincipal);
+        // this.add(principal);
 
-        // Configurar ventana
-        setTitle("Maquina Expendedora");
         setSize(1100,700);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        iniciarTodo();
-
         setVisible(true);
     }
+
     private void iniciarTodo() {
         colocarPaneles();
         colocarEtiquetas();
