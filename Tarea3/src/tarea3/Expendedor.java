@@ -60,11 +60,29 @@ public class Expendedor extends JPanel {
         JLabel pantallaSuperior = new JLabel(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")));
         pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
 
+        JLabel logoCocacola = new JLabel(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo.png")));
+        logoCocacola.setBounds(318, 222, logoCocacola.getIcon().getIconWidth(), logoCocacola.getIcon().getIconHeight());
+        JLabel logoSprite = new JLabel(new ImageIcon(getClass().getResource("/imagenes/spriteLogo.png")));
+        logoSprite.setBounds(318, 258, logoSprite.getIcon().getIconWidth(), logoSprite.getIcon().getIconHeight());
+        JLabel logoFanta = new JLabel(new ImageIcon(getClass().getResource("/imagenes/fantaLogo.png")));
+        logoFanta.setBounds(318, 294, logoFanta.getIcon().getIconWidth(), logoFanta.getIcon().getIconHeight());
+
+        JLabel vuelto = new JLabel(new ImageIcon(getClass().getResource("/imagenes/vuelto.png")));
+        vuelto.setBounds(322, 339, vuelto.getIcon().getIconWidth(), vuelto.getIcon().getIconHeight());
+
+        JLabel depCompra = new JLabel(new ImageIcon(getClass().getResource("/imagenes/depositoCompra.png")));
+        depCompra.setBounds(328, 431, depCompra.getIcon().getIconWidth(), depCompra.getIcon().getIconHeight());
+
         // Agregar todo
         this.add(depBebidas.get(0));
         this.add(depBebidas.get(1));
         this.add(depBebidas.get(2));
         this.add(pantallaSuperior);
+        this.add(logoCocacola);
+        this.add(logoSprite);
+        this.add(logoFanta);
+        this.add(vuelto);
+        this.add(depCompra);
         this.add(base);
     }
 
