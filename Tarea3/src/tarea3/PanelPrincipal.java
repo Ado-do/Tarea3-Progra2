@@ -15,7 +15,7 @@ public class PanelPrincipal extends JPanel implements ActionListener {
 
         fondo = new ImageIcon(getClass().getResource("/imagenes/fondo.png")).getImage();
 
-        exp = new Expendedor(6, 1000, 105, 50);
+        exp = new Expendedor(7, 1000, 105, 50);
         this.add(exp);
     } 
 

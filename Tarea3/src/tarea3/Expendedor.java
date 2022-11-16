@@ -21,17 +21,17 @@ public class Expendedor extends JPanel {
     private DepositoMoneda depMonedas;
     private DepositoMoneda depVuelto;
 
-    // Imagenes
-    private JLabel base;
-
     public Expendedor(int cantBebidas, int precioUnico, int xPos, int yPos) {
         super(null);
 
         this.precio = precioUnico;
         this.depBebidas = new ArrayList<DepositoBebida>(3);
-        depBebidas.add(new DepositoBebida());
-        depBebidas.add(new DepositoBebida());
-        depBebidas.add(new DepositoBebida());
+        depBebidas.add(new DepositoBebida(20, 85));
+        depBebidas.add(new DepositoBebida(120, 85));
+        depBebidas.add(new DepositoBebida(220, 85));
+        this.add(depBebidas.get(0));
+        this.add(depBebidas.get(1));
+        this.add(depBebidas.get(2));
         
         this.seriesCont = new int[]{1000,2000,3000};
         for (int i = 0; i < cantBebidas; i++) {
@@ -54,9 +54,17 @@ public class Expendedor extends JPanel {
         this.setOpaque(false);
 
         // Configurar JComponents
-        base = new JLabel(imgBase);
+        JLabel base = new JLabel(imgBase);
         base.setBounds(0, 0, imgBase.getIconWidth(), imgBase.getIconHeight());
 
+        JLabel pantallaSuperior = new JLabel(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")));
+        pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
+
+        // Agregar todo
+        this.add(depBebidas.get(0));
+        this.add(depBebidas.get(1));
+        this.add(depBebidas.get(2));
+        this.add(pantallaSuperior);
         this.add(base);
     }
 
@@ -128,7 +136,7 @@ public class Expendedor extends JPanel {
 
         for (int i = 0; i < 3; i++) {
             DepositoBebida dep = depBebidas.get(i);
-            if (!dep.quedanBebidas()) {
+            if (!dep.isEmpty()) {
                 for (int j = 0; j < capacidadDeps; j++) {
                     Bebida aux = null;
                     switch (i) {
