@@ -4,7 +4,6 @@ import tarea3.exceptions.*;
 
 import java.util.ArrayList;
 
-import java.awt.*;
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -60,10 +59,10 @@ public class Expendedor extends JPanel {
 
         JLabel pantallaSuperior = new JLabel(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")));
         pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
-      // Boton Coca Cola
-        logoCocacola = new JLabel(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo.png")));
+
+        // Boton Coca Cola
+        logoCocacola = new JLabel(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo1.png")));
         logoCocacola.setBounds(318, 222, logoCocacola.getIcon().getIconWidth(), logoCocacola.getIcon().getIconHeight());
-        // Mouse Listener para Coca Cola
         logoCocacola.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -73,12 +72,10 @@ public class Expendedor extends JPanel {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 logoCocacolaMouseExited(evt);
             }
-            
         });
         
-        
         // Boton Sprite
-        logoSprite = new JLabel(new ImageIcon(getClass().getResource("/imagenes/spriteLogo.png")));
+        logoSprite = new JLabel(new ImageIcon(getClass().getResource("/imagenes/spriteLogo1.png")));
         logoSprite.setBounds(318, 258, logoSprite.getIcon().getIconWidth(), logoSprite.getIcon().getIconHeight());
         logoSprite.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -92,7 +89,7 @@ public class Expendedor extends JPanel {
             
         });
         // Boton Fanta 
-        logoFanta = new JLabel(new ImageIcon(getClass().getResource("/imagenes/fantaLogo.png")));
+        logoFanta = new JLabel(new ImageIcon(getClass().getResource("/imagenes/fantaLogo1.png")));
         logoFanta.setBounds(318, 294, logoFanta.getIcon().getIconWidth(), logoFanta.getIcon().getIconHeight());
         logoFanta.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -105,10 +102,11 @@ public class Expendedor extends JPanel {
             }
             
         });
-        JLabel vuelto = new JLabel(new ImageIcon(getClass().getResource("/imagenes/vuelto.png")));
+
+        JLabel vuelto = new JLabel(new ImageIcon(getClass().getResource("/imagenes/vuelto1.png")));
         vuelto.setBounds(322, 339, vuelto.getIcon().getIconWidth(), vuelto.getIcon().getIconHeight());
 
-        JLabel depCompra = new JLabel(new ImageIcon(getClass().getResource("/imagenes/depositoCompra.png")));
+        JLabel depCompra = new JLabel(new ImageIcon(getClass().getResource("/imagenes/depositoCompra1.png")));
         depCompra.setBounds(328, 431, depCompra.getIcon().getIconWidth(), depCompra.getIcon().getIconHeight());
 
         // Agregar todo
@@ -127,20 +125,21 @@ public class Expendedor extends JPanel {
         logoCocacola.setIcon(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo2.png")));
     }
     public void logoCocacolaMouseExited(java.awt.event.MouseEvent evt){
-        logoCocacola.setIcon(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo.png")));
+        logoCocacola.setIcon(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo1.png")));
     }
     public void logoFantaMouseEntered(java.awt.event.MouseEvent evt){
         logoFanta.setIcon(new ImageIcon(getClass().getResource("/imagenes/fantaLogo2.png")));
     }
     public void logoFantaMouseExited(java.awt.event.MouseEvent evt){
-        logoFanta.setIcon(new ImageIcon(getClass().getResource("/imagenes/fantaLogo.png")));
+        logoFanta.setIcon(new ImageIcon(getClass().getResource("/imagenes/fantaLogo1.png")));
     }
     public void logoSpriteMouseEntered(java.awt.event.MouseEvent evt){
         logoSprite.setIcon(new ImageIcon(getClass().getResource("/imagenes/spriteLogo2.png")));
     }
     public void logoSpriteMouseExited(java.awt.event.MouseEvent evt){
-        logoSprite.setIcon(new ImageIcon(getClass().getResource("/imagenes/spriteLogo.png")));
+        logoSprite.setIcon(new ImageIcon(getClass().getResource("/imagenes/spriteLogo1.png")));
     }
+
     public void comprarBebida(Moneda m, int num) {  //* Modificado para compatibilizar con enunciado de la tarea3
         boolean devolverMoneda = false; // Flag para verificar si hay devolucion o no
         Bebida compra;
