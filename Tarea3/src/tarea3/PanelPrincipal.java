@@ -10,26 +10,23 @@ public class PanelPrincipal extends JPanel implements ActionListener {
 
     private Image fondo;
 
-    public PanelPrincipal () {
-        // super();
-        exp = new Expendedor(6, 1000); 
-        com = new Comprador(); 
-
-        this.setLayout(null);
-        this.setBackground(Color.BLACK);
+    public PanelPrincipal() {
+        super(null);
 
         fondo = new ImageIcon(getClass().getResource("/imagenes/fondo.png")).getImage();
+
+        exp = new Expendedor(6, 1000, 105, 50);
+        this.add(exp);
     } 
 
     @Override
     public void paint(Graphics g) {
-        
         g.drawImage(fondo, 0, 0, this.getWidth(), this.getHeight(), this);
         this.setOpaque(false);
-        
         super.paint(g);
-        //  com.paint(g);
-        //  exp.paint(g);
+
+        // exp.paint(g);
+        // com.paint(g);
     }
 
     @Override

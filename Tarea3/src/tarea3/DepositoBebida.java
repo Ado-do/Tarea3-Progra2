@@ -18,7 +18,7 @@ class DepositoBebida {
         }
     }
 
-    public int cantBebidas() {
-        return dep.size();
+    public boolean quedanBebidas() {
+        return dep.isEmpty();
     }
 }

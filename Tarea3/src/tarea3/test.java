@@ -8,6 +8,13 @@ public class test {
         dep.add(null);
         dep.add(new CocaCola(123));
         System.out.println(dep);
+
+        ArrayList<Moneda> mon = new ArrayList<Moneda>();
+        mon.add(new Moneda1000());
+
+        System.out.println(mon.remove(0));
+        // System.out.println(mon.remove(0));
+
     //     // 1: CocaCola, 2: Fanta, 3: Sprite.
 
     //     // Caso 1: Toma bebida y dice que tomó.

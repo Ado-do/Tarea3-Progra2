@@ -1,20 +1,32 @@
 package tarea3;
 
-import java.util.ArrayList;
 import tarea3.exceptions.*;
-import java.awt.*;
 
-public class Expendedor {
+import java.util.ArrayList;
+
+import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+public class Expendedor extends JPanel {
     private int precio;
+    private int dineroIngresado;
+
     private ArrayList<DepositoBebida> depBebidas;
     private int capacidadDeps;
     private int[] seriesCont;
+
     private Bebida depCompra;
     private DepositoMoneda depMonedas;
     private DepositoMoneda depVuelto;
-    
 
-    public Expendedor(int cantBebidas, int precioUnico) {
+    // Imagenes
+    private JLabel base;
+
+    public Expendedor(int cantBebidas, int precioUnico, int xPos, int yPos) {
+        super(null);
+
         this.precio = precioUnico;
         this.depBebidas = new ArrayList<DepositoBebida>(3);
         depBebidas.add(new DepositoBebida());
@@ -32,13 +44,28 @@ public class Expendedor {
         this.capacidadDeps = cantBebidas;
         this.depVuelto = new DepositoMoneda();
         this.depMonedas = new DepositoMoneda();
+        this.depCompra = null;
+
+        //* Configurar JPanel y JComponents
+        ImageIcon imgBase = new ImageIcon(getClass().getResource("/imagenes/baseExpendedor.png"));
+
+        // Configurar este panel
+        this.setBounds(xPos, yPos, imgBase.getIconWidth(), imgBase.getIconHeight());
+        this.setOpaque(false);
+
+        // Configurar JComponents
+        base = new JLabel(imgBase);
+        base.setBounds(0, 0, imgBase.getIconWidth(), imgBase.getIconHeight());
+
+        this.add(base);
     }
+
     public void comprarBebida(Moneda m, int num) {  //* Modificado para compatibilizar con enunciado de la tarea3
         boolean devolverMoneda = false; // Flag para verificar si hay devolucion o no
         Bebida compra;
 
         try {
-            // Se ingreso una moneda?
+            // * Se ingreso una moneda?
             if (m == null) {
                 compra = null;
                 throw new PagoIncorrectoException("No se ingreso moneda.");
@@ -86,7 +113,10 @@ public class Expendedor {
             System.out.println(e.getMessage());
         }
 
-        if (devolverMoneda) depVuelto.addMoneda(m); // Se guarda moneda para ser devuelta
+        if (devolverMoneda) {
+            depVuelto.addMoneda(m);
+            System.out.println("Moneda devuelta.");
+        }
     }
     public Bebida getBebida() {
         Bebida aux = depCompra;
@@ -94,9 +124,11 @@ public class Expendedor {
         return aux;
     }
     public void refillDep() {   //* Rellenar depósitos vacíos
+        System.out.println("Rellenando depositos vacios...");
+
         for (int i = 0; i < 3; i++) {
             DepositoBebida dep = depBebidas.get(i);
-            if (dep.cantBebidas() == 0) {
+            if (!dep.quedanBebidas()) {
                 for (int j = 0; j < capacidadDeps; j++) {
                     Bebida aux = null;
                     switch (i) {
@@ -113,7 +145,7 @@ public class Expendedor {
         return depVuelto.getMoneda();
     }
     //! WIP
-    public void paint(Graphics g) {
+    // public void paint(Graphics g) {
 
-    }
+    // }
 }

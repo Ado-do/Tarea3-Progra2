@@ -4,39 +4,40 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Ventana extends JFrame {
-    private JPanel panelPrincipal;
+    private PanelPrincipal panelPrincipal;
     
     public Ventana() {
         super("Tarea3");
-
-        panelPrincipal = new PanelPrincipal();
-        this.getContentPane().add(panelPrincipal);
-        // this.add(principal);
-
-        setSize(1100,700);
+        
+        // Configurar ventana
+        setSize(1100 + 15, 700 + 40); //? Lo sumado corresponde al margen superior de la ventana
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Iniciar componentes
+        initPanel();
         
         setVisible(true);
     }
 
     private void iniciarTodo() {
-        colocarPaneles();
         colocarEtiquetas();
         colocarBotones();
     }
-    private void colocarPaneles() {
-        panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(null); // Diseño del panel desactivado
-        this.getContentPane().add(panelPrincipal);
-        
+
+    private void initPanel() {
+        panelPrincipal = new PanelPrincipal();
+        // this.getContentPane().add(panelPrincipal);
+        this.add(panelPrincipal);
     }
+
     private void colocarBotones() {
         JButton Pagar = new JButton();
         Pagar.setText("hola");
         Pagar.setBounds(10,80,1000,700);
     }
+    
     private void colocarEtiquetas() {
         JLabel Muro = new JLabel(new ImageIcon(""));
         Muro.setBounds(10, 80, 1000, 700);
