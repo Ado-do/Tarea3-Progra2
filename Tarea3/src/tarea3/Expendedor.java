@@ -19,7 +19,7 @@ public class Expendedor extends JPanel {
     private Bebida depCompra;
     private DepositoMoneda depMonedas;
     private DepositoMoneda depVuelto;
-    public JLabel logoCocacola,logoSprite,logoFanta;
+    public JLabel logoCocacola,logoSprite,logoFanta, pantallaSuperior;
 
     public Expendedor(int cantBebidas, int precioUnico, int xPos, int yPos) {
         super(null);
@@ -57,9 +57,18 @@ public class Expendedor extends JPanel {
         JLabel base = new JLabel(imgBase);
         base.setBounds(0, 0, imgBase.getIconWidth(), imgBase.getIconHeight());
 
-        JLabel pantallaSuperior = new JLabel(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")));
+        pantallaSuperior = new JLabel(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")));
         pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
-
+        pantallaSuperior.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pantallaSuperiorMouseEntered(evt);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pantallaSuperiorMouseExited(evt);
+            }
+        });
         // Boton Coca Cola
         logoCocacola = new JLabel(new ImageIcon(getClass().getResource("/imagenes/cocacolaLogo1.png")));
         logoCocacola.setBounds(318, 222, logoCocacola.getIcon().getIconWidth(), logoCocacola.getIcon().getIconHeight());
@@ -138,6 +147,12 @@ public class Expendedor extends JPanel {
     }
     public void logoSpriteMouseExited(java.awt.event.MouseEvent evt){
         logoSprite.setIcon(new ImageIcon(getClass().getResource("/imagenes/spriteLogo1.png")));
+    }
+    public void pantallaSuperiorMouseEntered(java.awt.event.MouseEvent evt){
+        pantallaSuperior.setIcon(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior2.png")));
+    }
+    public void pantallaSuperiorMouseExited(java.awt.event.MouseEvent evt){
+        pantallaSuperior.setIcon(new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")));
     }
 
     public void comprarBebida(Moneda m, int num) {  //* Modificado para compatibilizar con enunciado de la tarea3
