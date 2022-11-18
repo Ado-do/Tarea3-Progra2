@@ -3,13 +3,19 @@ package tarea3;
 import tarea3.exceptions.*;
 
 import java.util.ArrayList;
-
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.awt.event.*;
-import java.awt.Color;
-import java.awt.Font;
+
+/* //! WEAS POR HACER (ATENTO KROSSITO)
+ * //TODO: HACER QUE RECIBA LA MONEDA Y DESPUES SE COMPRE CON ELLA 
+ * (NO QUE SE COMPRE EN EL MOMENTO CON ELLA, DE MANERA QUE SE MUESTRE EN LA PANTALLA EL DINERO INGRESADO ANTES DE COMPRAR)
+ * //TODO: HACER QUE LA PANTALLA SUPERIOR VAYA CAMBIANDO DURANTE EL PROCESO DE COMPRA (MENSAJITOS)
+ * //TODO: QUE SE DIBUJO UNA BEBIDA EN DEPOSITO DE COMPRA CUANDO COMPRE UNA BEBIDA (DESAPARECE CUANDO LA TOMA EL COMPRADOR)
+ * //TODO: PEQUEÑA ANIMACION DE BEBIDAS CAYENDO CUANDO SACAS UNA DE UN DEPOSITO (REALIZAR CAMBIO EN DEPOSITOS)
+ */
 
 public class Expendedor extends JPanel {
     private int precio, dineroIngresado;
@@ -20,7 +26,7 @@ public class Expendedor extends JPanel {
 
     private Bebida compra;
     private DepositoMoneda depMonedas, depVuelto;
-    private JLabel pantallaSuperior, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita;
+    private JLabel pantallaSuperior, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita;
     private ImageIcon[][] imagenes;
 
     public Expendedor(int cantBebidas, int precioUnico, int xPos, int yPos) {
@@ -55,6 +61,7 @@ public class Expendedor extends JPanel {
             {new ImageIcon(getClass().getResource("/imagenes/spriteLogo1.png")), new ImageIcon(getClass().getResource("/imagenes/spriteLogo2.png"))},
             {new ImageIcon(getClass().getResource("/imagenes/fantaLogo1.png")), new ImageIcon(getClass().getResource("/imagenes/fantaLogo2.png"))},
             {new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior1.png")), new ImageIcon(getClass().getResource("/imagenes/pantallaSuperior2.png"))},
+            {new ImageIcon(getClass().getResource("/imagenes/insertar1.png")), new ImageIcon(getClass().getResource("/imagenes/insertar2.png"))},
             {new ImageIcon(getClass().getResource("/imagenes/vuelto1.png")), new ImageIcon(getClass().getResource("/imagenes/vuelto2.png"))},
             {new ImageIcon(getClass().getResource("/imagenes/depositoCompra1.png")), new ImageIcon(getClass().getResource("/imagenes/depositoCompra2.png"))}
         };
@@ -86,6 +93,19 @@ public class Expendedor extends JPanel {
         infoPantallita.setForeground(Color.WHITE);
         infoPantallita.setSize(100, 20);
         infoPantallita.setLocation(325, 130);
+
+        insertar = new JLabel(imagenes[4][0]);
+        insertar.setBounds(320, 170, insertar.getIcon().getIconWidth(), insertar.getIcon().getIconHeight());
+        insertar.addMouseListener(new MouseAdapter() { // Se creara una clase con literal
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                insertarMouseEntered(evt);
+            }
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                insertarMouseExited(evt);
+            }
+        });
 
         // Boton CocaCola
         logoCocacola = new JLabel(imagenes[0][0]);
@@ -128,7 +148,7 @@ public class Expendedor extends JPanel {
             }
         });
 
-        vuelto = new JLabel(imagenes[4][0]);
+        vuelto = new JLabel(imagenes[5][0]);
         vuelto.setBounds(322, 339, vuelto.getIcon().getIconWidth(), vuelto.getIcon().getIconHeight());
         vuelto.addMouseListener(new MouseAdapter() {
             @Override
@@ -141,7 +161,7 @@ public class Expendedor extends JPanel {
             }
         });
 
-        depCompra = new JLabel(imagenes[5][0]);
+        depCompra = new JLabel(imagenes[6][0]);
         depCompra.setBounds(328, 431, depCompra.getIcon().getIconWidth(), depCompra.getIcon().getIconHeight());
         depCompra.addMouseListener(new MouseAdapter() {
             @Override
@@ -160,6 +180,7 @@ public class Expendedor extends JPanel {
         this.add(depBebidas.get(2));
         this.add(pantallaSuperior);
         this.add(infoPantallita);
+        this.add(insertar);
         this.add(logoCocacola);
         this.add(logoSprite);
         this.add(logoFanta);
@@ -168,8 +189,20 @@ public class Expendedor extends JPanel {
         this.add(base);
     }
     
-    public void CambiarInfoPantallita(String monea){
+    //* Cambiar informacion mostrada en pantalla de expendedor */
+    public void cambiarContDinero(String monea) {
         infoPantallita.setText(monea);
+    }
+
+    //* Funciones para obterner coordenadas y areas de Jlabels */
+    public Rectangle getInsertarBounds() {
+        return insertar.getBounds();
+    }
+    public Rectangle getVueltoBounds() {
+        return vuelto.getBounds();
+    }
+    public Rectangle getDepCompraBounds() {
+        return depCompra.getBounds();
     }
 
     public void comprarBebida(Moneda m, int num) {  //* Modificado para compatibilizar con enunciado de la tarea3
@@ -260,24 +293,30 @@ public class Expendedor extends JPanel {
         return depVuelto.getMoneda();
     }
     
-    //* Eventos de mousee */
+    //* Administracion de eventos */
     private void pantallaSuperiorMouseEntered(MouseEvent evt) {                                          
         pantallaSuperior.setIcon(imagenes[3][1]);
     }
     private void pantallaSuperiorMouseExited(MouseEvent evt) {
         pantallaSuperior.setIcon(imagenes[3][0]);
     }
-    private void vueltoMouseEntered(MouseEvent evt) {                                          
-        vuelto.setIcon(imagenes[4][1]);
+    public void insertarMouseEntered(MouseEvent evt) {                                          
+        insertar.setIcon(imagenes[4][1]);
     }
-    private void vueltoMouseExited(MouseEvent evt) {
-        vuelto.setIcon(imagenes[4][0]);
+    public void insertarMouseExited(MouseEvent evt) {
+        insertar.setIcon(imagenes[4][0]);
     }
-    private void depCompraMouseEntered(MouseEvent evt) {                                          
-        depCompra.setIcon(imagenes[5][1]);
+    public void vueltoMouseEntered(MouseEvent evt) {                                          
+        vuelto.setIcon(imagenes[5][1]);
     }
-    private void depCompraMouseExited(MouseEvent evt) {
-        depCompra.setIcon(imagenes[5][0]);
+    public void vueltoMouseExited(MouseEvent evt) {
+        vuelto.setIcon(imagenes[5][0]);
+    }
+    public void depCompraMouseEntered(MouseEvent evt) {                                          
+        depCompra.setIcon(imagenes[6][1]);
+    }
+    public void depCompraMouseExited(MouseEvent evt) {
+        depCompra.setIcon(imagenes[6][0]);
     }
     private void logoCocacolaMouseEntered(MouseEvent evt) {                                          
         logoCocacola.setIcon(imagenes[0][1]);

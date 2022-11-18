@@ -15,32 +15,10 @@ public class Ventana extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Iniciar componentes
-        initPanel();
+        //* Agregar JPanel principal con expendedor y comprador */
+        panelPrincipal = new PanelPrincipal();
+        this.add(panelPrincipal);
         
         setVisible(true);
-    }
-
-    private void iniciarTodo() {
-        colocarEtiquetas();
-        colocarBotones();
-    }
-
-    private void initPanel() {
-        panelPrincipal = new PanelPrincipal();
-        // this.getContentPane().add(panelPrincipal);
-        this.add(panelPrincipal);
-    }
-
-    private void colocarBotones() {
-        JButton Pagar = new JButton();
-        Pagar.setText("hola");
-        Pagar.setBounds(10,80,1000,700);
-    }
-    
-    private void colocarEtiquetas() {
-        JLabel Muro = new JLabel(new ImageIcon(""));
-        Muro.setBounds(10, 80, 1000, 700);
-        panelPrincipal.add(Muro);
     }
 }

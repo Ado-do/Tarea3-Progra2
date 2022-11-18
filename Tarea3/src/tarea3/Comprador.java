@@ -5,6 +5,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.*;
 
+/* //! WEAS POR HACER (ATENTO KROSSITO)
+ * //TODO: DIBUJAR (PONER IMAGENES) DE LOS INVENTARIOS
+ * (OPCIONAL) MOSTRAR UN TEXTO DE QUE SE TOMO UNA BEBIDA CUANDO CLIKEA UNA BEBIDA DEL INVENTARIO Y Q DESAPARESCA
+ * (OPCIONAL) HACER QUE INVENTARIO SE ABRA Y CIERRE SI CLICKEAS EN EL BOLSILLO Y LA CESTA (INDICAR CON FLECHAS O ALGUNA WEA)
+ */
+
 public class Comprador extends JLabel { //* Adaptado para hacer varias compras
     private ArrayList<Bebida> compras;
     private ArrayList<Moneda> monederoVuelto;
