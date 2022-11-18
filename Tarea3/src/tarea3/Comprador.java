@@ -79,6 +79,9 @@ public class Comprador extends JLabel { //* Adaptado para hacer varias compras
             else quedaVuelto = false;
         } while (quedaVuelto);
     }
+    public Moneda MonedaSeleccionada(){
+        return monedaElegida;
+    }
     public String beberBebida(int index) {
         return compras.remove(index).beber();
     }

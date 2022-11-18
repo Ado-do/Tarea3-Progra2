@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /* //! WEAS POR HACER (ATENTO KROSSITO)
- * //TODO: HACER QUE RECIBA LA MONEDA Y DESPUES SE COMPRE CON ELLA 
+ * //TODO: HACER QUE RECIBA LA MONEDA Y DESPUES SE COMPRE CON ELLA   
  * (NO QUE SE COMPRE EN EL MOMENTO CON ELLA, DE MANERA QUE SE MUESTRE EN LA PANTALLA EL DINERO INGRESADO ANTES DE COMPRAR)
  * //TODO: HACER QUE LA PANTALLA SUPERIOR VAYA CAMBIANDO DURANTE EL PROCESO DE COMPRA (MENSAJITOS)
  * //TODO: QUE SE DIBUJO UNA BEBIDA EN DEPOSITO DE COMPRA CUANDO COMPRE UNA BEBIDA (DESAPARECE CUANDO LA TOMA EL COMPRADOR)
@@ -23,10 +23,11 @@ public class Expendedor extends JPanel {
     private ArrayList<DepositoBebida> depBebidas;
     private int capacidadDeps;
     private int[] seriesCont;
+    public int bebidaseleccionada;
 
     private Bebida compra;
     private DepositoMoneda depMonedas, depVuelto;
-    private JLabel pantallaSuperior, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita;
+    private JLabel pantallaSuperior, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita,pantallaInfoSuperior;
     private ImageIcon[][] imagenes;
 
     public Expendedor(int cantBebidas, int precioUnico, int xPos, int yPos) {
@@ -73,7 +74,9 @@ public class Expendedor extends JPanel {
         //* Configurar JComponents
         JLabel base = new JLabel(imgBase);
         base.setBounds(0, 0, imgBase.getIconWidth(), imgBase.getIconHeight());
-
+        
+        
+        
         pantallaSuperior = new JLabel(imagenes[3][0]);
         pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
         pantallaSuperior.addMouseListener(new MouseAdapter() { // Se creara una clase con literal
@@ -86,13 +89,21 @@ public class Expendedor extends JPanel {
                 pantallaSuperiorMouseExited(evt);
             }
         });
-
+       
+        
         infoPantallita = new JLabel();
         infoPantallita.setText("");
         infoPantallita.setFont(new Font("Arial", Font.PLAIN, 20));
         infoPantallita.setForeground(Color.WHITE);
         infoPantallita.setSize(100, 20);
         infoPantallita.setLocation(325, 130);
+        
+        pantallaInfoSuperior = new JLabel();
+        pantallaInfoSuperior.setText("");
+        pantallaInfoSuperior.setFont(new Font("Arial", Font.PLAIN, 20));
+        pantallaInfoSuperior.setForeground(Color.WHITE);
+        pantallaInfoSuperior.setSize(1000, 20);
+        pantallaInfoSuperior.setLocation(40, 40);
 
         insertar = new JLabel(imagenes[4][0]);
         insertar.setBounds(320, 170, insertar.getIcon().getIconWidth(), insertar.getIcon().getIconHeight());
@@ -178,6 +189,7 @@ public class Expendedor extends JPanel {
         this.add(depBebidas.get(0));
         this.add(depBebidas.get(1));
         this.add(depBebidas.get(2));
+        this.add(pantallaInfoSuperior);
         this.add(pantallaSuperior);
         this.add(infoPantallita);
         this.add(insertar);
@@ -192,6 +204,10 @@ public class Expendedor extends JPanel {
     //* Cambiar informacion mostrada en pantalla de expendedor */
     public void cambiarContDinero(String monea) {
         infoPantallita.setText(monea);
+    }
+    
+    public void cambiarInfoPantallaSup(String info) {
+        pantallaInfoSuperior.setText(info);
     }
 
     //* Funciones para obterner coordenadas y areas de Jlabels */
@@ -291,6 +307,9 @@ public class Expendedor extends JPanel {
     }
     public Moneda getVuelto() {
         return depVuelto.getMoneda();
+    }
+    public void recibirMoneda(Moneda x) {
+        depMonedas.addMoneda(x);
     }
     
     //* Administracion de eventos */

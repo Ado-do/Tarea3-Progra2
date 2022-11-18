@@ -7,7 +7,9 @@ import javax.swing.*;
 public class PanelPrincipal extends JPanel {
     private Comprador comp;
     private Expendedor exp;
-
+    
+    private int eleccion;
+    
     private Moneda m100, m500, m1000;
     private JLabel insertar, vuelto, depCompra;
 
@@ -158,8 +160,8 @@ public class PanelPrincipal extends JPanel {
         m1000.setIcon(imagenes[0][0]);
     } 
     private void m1000MouseClicked(MouseEvent evt){
-        comp.setMoneda(1000);
-        exp.cambiarContDinero("$1000");
+        eleccion = 1;
+        comp.setMoneda(1000);    
     }
     private void m500MouseEntered(MouseEvent evt){
         m500.setIcon(imagenes[1][1]);
@@ -168,8 +170,8 @@ public class PanelPrincipal extends JPanel {
         m500.setIcon(imagenes[1][0]);
     }
     private void m500MouseClicked(MouseEvent evt){
+        eleccion = 2;
         comp.setMoneda(500);
-        exp.cambiarContDinero("$ 500");
     }
     private void m100MouseEntered(MouseEvent evt){
         m100.setIcon(imagenes[2][1]);
@@ -178,8 +180,8 @@ public class PanelPrincipal extends JPanel {
         m100.setIcon(imagenes[2][0]);
     }
     private void m100MouseClicked(MouseEvent evt){
+        eleccion = 3 ;
         comp.setMoneda(100);
-        exp.cambiarContDinero("$ 100");
     }
     private void insertarMouseEntered(MouseEvent evt) {
         exp.insertarMouseEntered(evt);
@@ -188,7 +190,22 @@ public class PanelPrincipal extends JPanel {
         exp.insertarMouseExited(evt);
     }
     private void insertarMouseClicked(MouseEvent evt) {
-        System.out.println("SEXOOOOOOOOOOOOOOOOOOO"); //? ESTE SI FUNCIONA WEA RARA
+        
+        switch(eleccion){
+            case 1:
+                exp.cambiarInfoPantallaSup("Moneda de $1000 ingresada");
+                exp.cambiarContDinero("$1000");
+                break;
+            case 2:
+                exp.cambiarInfoPantallaSup("Moneda de $500 ingresada");
+                exp.cambiarContDinero("$ 500");
+                break;
+            case 3:
+                exp.cambiarInfoPantallaSup("Moneda de $100 ingresada");
+                exp.cambiarContDinero("$ 100");
+                break;
+        }
+        //exp.recibirMoneda(comp.MonedaSeleccionada());
     }
     private void vueltoMouseEntered(MouseEvent evt) {
         exp.vueltoMouseEntered(evt);

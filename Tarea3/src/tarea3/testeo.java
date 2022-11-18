@@ -32,6 +32,9 @@ public class testeo extends javax.swing.JFrame {
 
         logoCocacola.setText("jLabel1");
         logoCocacola.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoCocacolaMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 logoCocacolaMouseEntered(evt);
             }
@@ -67,6 +70,10 @@ public class testeo extends javax.swing.JFrame {
     private void logoCocacolaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoCocacolaMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_logoCocacolaMouseExited
+
+    private void logoCocacolaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoCocacolaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_logoCocacolaMouseClicked
 
     /**
      * @param args the command line arguments
