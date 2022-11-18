@@ -205,7 +205,7 @@ public class PanelPrincipal extends JPanel {
                 exp.cambiarContDinero("$ 100");
                 break;
         }
-        //exp.recibirMoneda(comp.MonedaSeleccionada());
+        exp.recibirMoneda(comp.MonedaSeleccionada());
     }
     private void vueltoMouseEntered(MouseEvent evt) {
         exp.vueltoMouseEntered(evt);

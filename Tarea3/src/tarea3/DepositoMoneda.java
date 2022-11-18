@@ -9,7 +9,7 @@ public class DepositoMoneda {   //* (DepositoVuelto -> DepositoMoneda) Modificad
     }
 
     public void addMoneda(Moneda m) {
-        if (m != null) addMoneda(m);
+        if (m != null) dep.add(m);
     }
 
     public Moneda getMoneda() {
