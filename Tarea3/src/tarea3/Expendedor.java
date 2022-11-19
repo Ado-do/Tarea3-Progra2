@@ -9,13 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-/* //! WEAS POR HACER (ATENTO KROSSITO)
- * //TODO:(METODO CREADO, PERO CON FALLAS) HACER QUE RECIBA LA MONEDA Y DESPUES SE COMPRE CON ELLA   
- * (NO QUE SE COMPRE EN EL MOMENTO CON ELLA, DE MANERA QUE SE MUESTRE EN LA PANTALLA EL DINERO INGRESADO ANTES DE COMPRAR)
- * //TODO:(LISTO) HACER QUE LA PANTALLA SUPERIOR VAYA CAMBIANDO DURANTE EL PROCESO DE COMPRA (MENSAJITOS)
- * //TODO: PEQUEÑA ANIMACION DE BEBIDAS CAYENDO CUANDO SACAS UNA DE UN DEPOSITO (REALIZAR CAMBIO EN DEPOSITOS)
- */
-
 public class Expendedor extends JPanel {
     private int precio;
     private ArrayList<DepositoBebida> depBebidas;
@@ -240,7 +233,7 @@ public class Expendedor extends JPanel {
 
             // * Ya había otra compra en proceso?
             } else if (compra != null) {
-                this.updateInfoPantallaSup("Recoja compra anterior antes de continuar.");
+                this.updateInfoPantallaSup("Recoja su compra para continuar");
 
                 devolverMoneda = true;
                 throw new CompraEnProcesoException("Recoja su anterior compra antes de realizar otra.");
@@ -300,7 +293,10 @@ public class Expendedor extends JPanel {
         }
 
         if (devolverMoneda) {
+            this.updateInfoPantallita("$ 0");
+
             depVuelto.addMoneda(monedaDeCompra);
+            monedaDeCompra = null;
             System.out.println("Moneda devuelta.");
         }
     }
@@ -352,6 +348,12 @@ public class Expendedor extends JPanel {
 
             this.monedaDeCompra = m;
         }
+    }
+    public boolean hayCompra() {
+        return (compra != null) ? true : false;
+    }
+    public boolean hayVuelto() {
+        return (!depVuelto.isEmpty()) ? true : false; 
     }
     
     //* Administracion de eventos */

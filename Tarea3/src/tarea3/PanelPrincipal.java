@@ -2,6 +2,8 @@ package tarea3;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 /*
@@ -15,6 +17,7 @@ public class PanelPrincipal extends JPanel {
 
     private JLabel m100, m500, m1000;
     private JLabel insertar, botonCocacola, botonSprite, botonFanta, vuelto, depCompra;
+    private JPanel invBebidas, invMonedas;
 
     private ImageIcon[][] imagenes;
     private Image fondo;
@@ -27,7 +30,7 @@ public class PanelPrincipal extends JPanel {
         fondo = new ImageIcon(getClass().getResource("/imagenes/fondo.png")).getImage();
 
         //* Inicializar OBJETOS PRINCIPALES */
-        exp = new Expendedor(7, 800, 80, 50);
+        exp = new Expendedor(7, 600, 80, 50);
         comp = new Comprador(exp.getX() + 460, exp.getY() + 160);
         
         //* Inicializar imagenes a reutilizar
@@ -204,18 +207,111 @@ public class PanelPrincipal extends JPanel {
             }
         });
 
+        //* JLabels de inventarios de Comprador */
+        ImageIcon imgInventario = new ImageIcon(getClass().getResource("/imagenes/inventario.png"));
+        ImageIcon imgBolsillo = new ImageIcon(getClass().getResource("/imagenes/bolsillo.png"));
+
+        invMonedas = new JPanel(null);
+        invMonedas.setBounds(comp.getX() + 205, comp.getY() + 40, imgBolsillo.getIconWidth(), imgBolsillo.getIconHeight());
+        invMonedas.setOpaque(false);
+        JLabel bolsillo = new JLabel(imgBolsillo);
+        bolsillo.setBounds(0, 0, imgBolsillo.getIconWidth(), imgBolsillo.getIconHeight());
+        invMonedas.add(bolsillo);
+
+       
+        
+        
+
+        invBebidas = new JPanel(null);
+        invBebidas.setBounds(comp.getX() + 205, comp.getY() + 140, imgInventario.getIconWidth(), imgInventario.getIconHeight());
+        invBebidas.setOpaque(false);
+        JLabel inventario = new JLabel(imgInventario);
+        inventario.setBounds(0, 0, imgInventario.getIconWidth(), imgInventario.getIconHeight());
+        invBebidas.add(inventario);
+        invBebidas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                invBebidasMouseClicked(evt);
+            }
+        });
+
+        JLabel cesta = new JLabel(new ImageIcon(getClass().getResource("/imagenes/cestaCompras.png")));
+        cesta.setBounds(comp.getX() + 110, comp.getY() + 340, cesta.getIcon().getIconWidth(), cesta.getIcon().getIconHeight());
+
+        JButton botonBolsillo = new JButton("Vaciar monedero");
+        botonBolsillo.setSize(140, 24);
+        botonBolsillo.setLocation(invMonedas.getX() + 136, invMonedas.getY());
+
+        JButton botonBebida = new JButton("Tomar");
+        botonBebida.setSize(100, 24);
+        botonBebida.setLocation(invBebidas.getX() + 176, invBebidas.getY());
+
         // Agregar todo a JPanel principal
         this.add(m1000);
         this.add(m500);        
         this.add(m100);
+
         this.add(insertar);
         this.add(botonCocacola);
         this.add(botonSprite);
         this.add(botonFanta);
         this.add(vuelto);
         this.add(depCompra);
+
+        this.add(botonBolsillo);
+        this.add(botonBebida);
+
+        this.add(cesta);
+        this.add(invBebidas);
+        this.add(invMonedas);
+
         this.add(comp);
         this.add(exp);
+    }
+
+    private void actualizarMonedero() {
+        ArrayList<Moneda> monedasComprador = comp.getMonedero();
+
+        for (int i = 0, posicion = 0, ypos = 26; i < monedasComprador.size(); i++, posicion += 20) {
+            Moneda actual = monedasComprador.get(i);
+            if (posicion ==260) {
+                posicion = 0;
+                ypos += 20;              
+            }
+            if(ypos == 86) {
+                System.out.println("Monedero lleno!!");    
+                break;
+            }
+            actual.setLocation(10 + posicion, ypos);
+            actual.setVisible(true);
+
+            invMonedas.add(actual);
+            invMonedas.setComponentZOrder(actual, 0);
+        }
+        
+       invMonedas.updateUI();
+    }
+
+    private void actualizarInventario() {
+        ArrayList<Bebida> comprasComprador = comp.getCompras();
+        int columnas = 1;
+
+        for (int i = 0, posX = 4, posY = 25; i < comprasComprador.size(); i++, posX += 34) {
+            Bebida actual = comprasComprador.get(i);
+            
+            if (i % 8 == 0 && i != 0) {
+                posX = 4;
+                posY += 62;
+                columnas++;
+            }
+            if (columnas > 3) break;
+            
+            actual.setLocation(posX, posY);
+            actual.setVisible(true);
+            invBebidas.add(actual);
+            invBebidas.setComponentZOrder(actual, 0);
+        }
+        invBebidas.updateUI();
     }
 
     //* Administracion de eventos */
@@ -257,7 +353,6 @@ public class PanelPrincipal extends JPanel {
         exp.insertarMouseExited(evt);
     }
     private void insertarMouseClicked(MouseEvent evt) { //* INSERTAR MONEDA */
-        // if (comp.tieneMonedaElegida()) exp.insertarMouseClicked(evt, eleccionBebida, comp.getMonedaElegida());
         comp.ingresarMoneda(exp);
     }
     
@@ -298,7 +393,10 @@ public class PanelPrincipal extends JPanel {
         exp.vueltoMouseExited(evt);
     }
     private void vueltoMouseClicked(MouseEvent evt) { //* RECUPERAR VUELTO */
-        comp.getVuelto(exp);
+        if (exp.hayVuelto()) {
+            comp.getVuelto(exp);
+            actualizarMonedero();
+        }
     }
     
     private void depCompraMouseEntered(MouseEvent evt) {
@@ -308,7 +406,14 @@ public class PanelPrincipal extends JPanel {
         exp.depCompraMouseExited(evt);
     }
     private void depCompraMouseClicked(MouseEvent evt) { //* RECOGER COMPRA */
-        comp.getBebida(exp);
+        if (exp.hayCompra()) {
+            comp.getBebida(exp);
+            actualizarInventario();
+        }
+    }
+
+    private void invBebidasMouseClicked(MouseEvent evt) {
+        //TODO DETECTAR CLICKS A BEBIDAS Y TOMARSELAS
     }
 
     @Override

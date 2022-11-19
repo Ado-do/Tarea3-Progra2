@@ -15,4 +15,8 @@ public class DepositoMoneda {   //* (DepositoVuelto -> DepositoMoneda) Modificad
     public Moneda getMoneda() {
         return (dep.isEmpty()) ? null : dep.remove(0);
     }
+    
+    public boolean isEmpty() {
+        return dep.isEmpty();
+    }
 }

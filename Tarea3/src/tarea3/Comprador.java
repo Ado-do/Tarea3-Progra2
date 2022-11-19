@@ -17,6 +17,15 @@ public class Comprador extends JPanel { //* Adaptado para hacer varias compras
     private ArrayList<Bebida> compras;
     private ArrayList<Moneda> monederoVuelto;
     private Moneda monedaParaCompra;
+    
+
+    //* Para dibujar en Panel Principal */
+    public ArrayList<Bebida> getCompras() {
+        return compras;
+    }
+    public ArrayList<Moneda> getMonedero() {
+        return monederoVuelto;
+    }
 
     public Comprador(int xPos, int yPos) {
         super();
