@@ -3,85 +3,89 @@ package tarea3;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.awt.*;
+import javax.swing.JPanel;
 
 /* //! WEAS POR HACER (ATENTO KROSSITO)
  * //TODO: DIBUJAR (PONER IMAGENES) DE LOS INVENTARIOS
  * (OPCIONAL) MOSTRAR UN TEXTO DE QUE SE TOMO UNA BEBIDA CUANDO CLIKEA UNA BEBIDA DEL INVENTARIO Y Q DESAPARESCA
  * (OPCIONAL) HACER QUE INVENTARIO SE ABRA Y CIERRE SI CLICKEAS EN EL BOLSILLO Y LA CESTA (INDICAR CON FLECHAS O ALGUNA WEA)
+ * 
+ * //TODO HACER QUE COMPRADOR PRESIONE LOS BOTONES, (USAR SUS METODOS DE COMPRA, QUE EL INGRESE LA MONEDA)
  */
 
-public class Comprador extends JLabel { //* Adaptado para hacer varias compras
+public class Comprador extends JPanel { //* Adaptado para hacer varias compras
     private ArrayList<Bebida> compras;
     private ArrayList<Moneda> monederoVuelto;
-    private Moneda monedaElegida;
-    private JLabel monedita;
-    private ImageIcon[] imgMoneditas;
+    private Moneda monedaParaCompra;
 
     public Comprador(int xPos, int yPos) {
         super();
 
         compras = new ArrayList<Bebida>();
         monederoVuelto = new ArrayList<Moneda>();
-        monedaElegida = null;
+        monedaParaCompra = null;
 
-        ImageIcon image = new ImageIcon(getClass().getResource("/imagenes/comprador.png"));
-        this.setIcon(image);
-        this.setBounds(xPos, yPos, image.getIconWidth(), image.getIconHeight());
+        ImageIcon imgComp = new ImageIcon(getClass().getResource("/imagenes/comprador.png"));
+        
+        this.setLayout(null);
+        this.setBounds(xPos, yPos, imgComp.getIconWidth(), imgComp.getIconHeight());
+        this.setOpaque(false);
 
-        imgMoneditas = new ImageIcon[] {
-            new ImageIcon(getClass().getResource("/imagenes/M1000_3.png")),
-            new ImageIcon(getClass().getResource("/imagenes/M500_3.png")),
-            new ImageIcon(getClass().getResource("/imagenes/M100_3.png"))
-        };
+        JLabel comp = new JLabel(imgComp);
+        comp.setBounds(0, 0, imgComp.getIconWidth(), imgComp.getIconHeight());
 
-        monedita = new JLabel();
-        monedita.setBounds(25, 255, 20, 20);
-        monedita.setVisible(false);
-
-        this.add(monedita);
+        this.add(comp);
     }
     
     public void comprarBebida(int numBebida, Expendedor exp) {
-        exp.comprarBebida(this.monedaElegida, numBebida);
-        monedaElegida = null;
+        exp.comprarBebida(numBebida);
     }
+
     public void getBebida(Expendedor exp) {
         Bebida compra = exp.getBebida();
         if (compra != null) {
             this.compras.add(compra);
         }
     }
-    public void setMoneda(int eleccion) {
-        switch (eleccion) {
-            case 1000: 
-                monedaElegida = new Moneda1000();
-                monedita.setIcon(imgMoneditas[0]);
-                break;
-            case 500: 
-                monedaElegida = new Moneda500();
-                monedita.setIcon(imgMoneditas[1]);
-                break;
-            case 100: 
-                monedaElegida = new Moneda100();
-                monedita.setIcon(imgMoneditas[2]);
-                break;
-            default: 
-                break;
-        }
-        if (!monedita.isVisible()) monedita.setVisible(true);
+    
+    public void setMoneda(Moneda m) {
+        if (tieneMonedaParaComprar()) remove(monedaParaCompra);
+
+        monedaParaCompra = m;
+        monedaParaCompra.setLocation(20, 255);
+        monedaParaCompra.setVisible(true);
+        this.add(monedaParaCompra);
+        this.setComponentZOrder(monedaParaCompra, 0);
+
+        this.updateUI();
     }
+    
     public void getVuelto(Expendedor exp) {
         boolean quedaVuelto = true;
         do {
             Moneda vuelto = exp.getVuelto();
-            if (vuelto != null) monederoVuelto.add(vuelto);
-            else quedaVuelto = false;
+            if (vuelto != null) {
+                System.out.println("Moneda de $"+vuelto.getValor()+" recibida");
+                monederoVuelto.add(vuelto);
+            } else {
+                quedaVuelto = false;
+            }
         } while (quedaVuelto);
     }
-    public Moneda MonedaSeleccionada(){
-        return monedaElegida;
+
+    public void ingresarMoneda(Expendedor exp) {
+        if (monedaParaCompra != null) {
+            monedaParaCompra.setVisible(false);
+            exp.ingresarMoneda(monedaParaCompra);
+            this.remove(monedaParaCompra);
+            monedaParaCompra = null;
+        }
     }
+    
+    public boolean tieneMonedaParaComprar() {
+        return (monedaParaCompra != null) ? true : false;
+    }
+   
     public String beberBebida(int index) {
         return compras.remove(index).beber();
     }

@@ -4,18 +4,22 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/*
+ * //TODO: Quitar JLabels que no hacen falta ser declaradas en las propiedades de todas las clases
+ * //TODO: Hacer que el expendedor avise de alguna forma que hay vuelto (resaltar boton de vuelto cuando haya)
+ */
+
 public class PanelPrincipal extends JPanel {
     private Comprador comp;
     private Expendedor exp;
-    
-    private int eleccion;
-    
-    private Moneda m100, m500, m1000;
-    private JLabel insertar, vuelto, depCompra;
+
+    private JLabel m100, m500, m1000;
+    private JLabel insertar, botonCocacola, botonSprite, botonFanta, vuelto, depCompra;
 
     private ImageIcon[][] imagenes;
     private Image fondo;
 
+    //* Constructor */
     public PanelPrincipal() {
         super(null);
 
@@ -23,7 +27,7 @@ public class PanelPrincipal extends JPanel {
         fondo = new ImageIcon(getClass().getResource("/imagenes/fondo.png")).getImage();
 
         //* Inicializar OBJETOS PRINCIPALES */
-        exp = new Expendedor(7, 1000, 80, 50);
+        exp = new Expendedor(7, 800, 80, 50);
         comp = new Comprador(exp.getX() + 460, exp.getY() + 160);
         
         //* Inicializar imagenes a reutilizar
@@ -34,8 +38,8 @@ public class PanelPrincipal extends JPanel {
         };
        
         //* Inicialiar monedas de interfaz
-        m1000 = new Moneda1000();
-        m1000.setLocation(exp.getX() + 410, exp.getY() + 120);
+        m1000 = new JLabel(imagenes[0][0]);
+        m1000.setBounds(exp.getX() + 410, exp.getY() + 120, 54, 54);
         m1000.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -51,8 +55,8 @@ public class PanelPrincipal extends JPanel {
             }
         });
 
-        m500 = new Moneda500();
-        m500.setLocation(exp.getX() + 410, exp.getY() + 180);
+        m500 = new JLabel(imagenes[1][0]);
+        m500.setBounds(exp.getX() + 410, exp.getY() + 180, 54, 54);
         m500.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -68,8 +72,8 @@ public class PanelPrincipal extends JPanel {
             }
         });
 
-        m100 = new Moneda100();
-        m100.setLocation(exp.getX() + 410, exp.getY() + 240);
+        m100 = new JLabel(imagenes[2][0]);
+        m100.setBounds(exp.getX() + 410, exp.getY() + 240, 54, 54);
         m100.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -102,6 +106,63 @@ public class PanelPrincipal extends JPanel {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 insertarMouseClicked(evt);
+            }
+        });
+
+        botonCocacola = new JLabel();
+        Rectangle cocacolaBounds = exp.getCocacolaBounds();
+        cocacolaBounds.setLocation((int)cocacolaBounds.getX() + exp.getX(), (int)cocacolaBounds.getY() + exp.getY());
+        botonCocacola.setBounds(cocacolaBounds);
+        botonCocacola.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                botonCocacolaMouseEntered(evt);
+            }
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                botonCocacolaMouseExited(evt);
+            }
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                botonCocacolaMouseClicked(evt);
+            }
+        });
+
+        botonSprite = new JLabel();
+        Rectangle spriteBounds = exp.getSpriteBounds();
+        spriteBounds.setLocation((int)spriteBounds.getX() + exp.getX(), (int)spriteBounds.getY() + exp.getY());
+        botonSprite.setBounds(spriteBounds);
+        botonSprite.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                botonSpriteMouseEntered(evt);
+            }
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                botonSpriteMouseExited(evt);
+            }
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                botonSpriteMouseClicked(evt);
+            }
+        });
+
+        botonFanta = new JLabel();
+        Rectangle fantaBounds = exp.getFantaBounds();
+        fantaBounds.setLocation((int)fantaBounds.getX() + exp.getX(), (int)fantaBounds.getY() + exp.getY());
+        botonFanta.setBounds(fantaBounds);
+        botonFanta.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                botonFantaMouseEntered(evt);
+            }
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                botonFantaMouseExited(evt);
+            }
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                botonFantaMouseClicked(evt);
             }
         });
 
@@ -148,82 +209,106 @@ public class PanelPrincipal extends JPanel {
         this.add(m500);        
         this.add(m100);
         this.add(insertar);
+        this.add(botonCocacola);
+        this.add(botonSprite);
+        this.add(botonFanta);
+        this.add(vuelto);
+        this.add(depCompra);
         this.add(comp);
         this.add(exp);
     }
 
     //* Administracion de eventos */
-    private void m1000MouseEntered(MouseEvent evt){
+    //TODO: CUANDO NO SE PUEDA PRESIONAR UN BOTON, SEGUN PROCESO DE COMPRA, QUE NO RESALTE AL PASAR EL MOUSE ENCIMA
+    private void m1000MouseEntered(MouseEvent evt) {
         m1000.setIcon(imagenes[0][1]);
     }
-    private void m1000MouseExited(MouseEvent evt){
+    private void m1000MouseExited(MouseEvent evt) {
         m1000.setIcon(imagenes[0][0]);
     } 
-    private void m1000MouseClicked(MouseEvent evt){
-        eleccion = 1;
-        comp.setMoneda(1000);    
+    private void m1000MouseClicked(MouseEvent evt) { //* ELEGIR MONEDA DE 1000 */
+        comp.setMoneda(new Moneda1000(false));    
     }
-    private void m500MouseEntered(MouseEvent evt){
+   
+    private void m500MouseEntered(MouseEvent evt) {
         m500.setIcon(imagenes[1][1]);
     }
-    private void m500MouseExited(MouseEvent evt){
+    private void m500MouseExited(MouseEvent evt) {
         m500.setIcon(imagenes[1][0]);
     }
-    private void m500MouseClicked(MouseEvent evt){
-        eleccion = 2;
-        comp.setMoneda(500);
+    private void m500MouseClicked(MouseEvent evt) { //* ELEGIR MONEDA DE 500 */
+        comp.setMoneda(new Moneda500(false));
     }
-    private void m100MouseEntered(MouseEvent evt){
+    
+    private void m100MouseEntered(MouseEvent evt) {
         m100.setIcon(imagenes[2][1]);
     }
-    private void m100MouseExited(MouseEvent evt){
+    private void m100MouseExited(MouseEvent evt) {
         m100.setIcon(imagenes[2][0]);
     }
-    private void m100MouseClicked(MouseEvent evt){
-        eleccion = 3 ;
-        comp.setMoneda(100);
+    private void m100MouseClicked(MouseEvent evt) {  //* ELEGIR MONEDA DE 100 */
+        comp.setMoneda(new Moneda100(false));
     }
+    
     private void insertarMouseEntered(MouseEvent evt) {
         exp.insertarMouseEntered(evt);
     }
     private void insertarMouseExited(MouseEvent evt) {
         exp.insertarMouseExited(evt);
     }
-    private void insertarMouseClicked(MouseEvent evt) {
-        
-        switch(eleccion){
-            case 1:
-                exp.cambiarInfoPantallaSup("Moneda de $1000 ingresada");
-                exp.cambiarContDinero("$1000");
-                break;
-            case 2:
-                exp.cambiarInfoPantallaSup("Moneda de $500 ingresada");
-                exp.cambiarContDinero("$ 500");
-                break;
-            case 3:
-                exp.cambiarInfoPantallaSup("Moneda de $100 ingresada");
-                exp.cambiarContDinero("$ 100");
-                break;
-        }
-        exp.recibirMoneda(comp.MonedaSeleccionada());
+    private void insertarMouseClicked(MouseEvent evt) { //* INSERTAR MONEDA */
+        // if (comp.tieneMonedaElegida()) exp.insertarMouseClicked(evt, eleccionBebida, comp.getMonedaElegida());
+        comp.ingresarMoneda(exp);
     }
+    
+    private void botonCocacolaMouseEntered(MouseEvent evt) {
+        exp.logoCocacolaMouseEntered(evt);
+    }
+    private void botonCocacolaMouseExited(MouseEvent evt) {
+        exp.logoCocacolaMouseExited(evt);
+    }
+    private void botonCocacolaMouseClicked(MouseEvent evt) { //* APRETAR COCACOLA (COMPRAR COCACOLA) */
+        comp.comprarBebida(1, exp);
+    }
+
+    private void botonSpriteMouseEntered(MouseEvent evt) {
+        exp.logoSpriteMouseEntered(evt);
+    }
+    private void botonSpriteMouseExited(MouseEvent evt) {
+        exp.logoSpriteMouseExited(evt);
+    }
+    private void botonSpriteMouseClicked(MouseEvent evt) { //* APRETAR SPRITE (COMPRAR SPRITE) */
+        comp.comprarBebida(2, exp);
+    }
+
+    private void botonFantaMouseEntered(MouseEvent evt) {
+        exp.logoFantaMouseEntered(evt);
+    }
+    private void botonFantaMouseExited(MouseEvent evt) {
+        exp.logoFantaMouseExited(evt);
+    }
+    private void botonFantaMouseClicked(MouseEvent evt) { //* APRETAR FANTA (COMPRAR FANTA) */
+        comp.comprarBebida(3, exp);
+    }
+
     private void vueltoMouseEntered(MouseEvent evt) {
         exp.vueltoMouseEntered(evt);
     }
     private void vueltoMouseExited(MouseEvent evt) {
         exp.vueltoMouseExited(evt);
     }
-    private void vueltoMouseClicked(MouseEvent evt) {
-        System.out.println("SEXOOOOOOOOOOOOOOOOOOO"); //! ESTA WEA NO FUNCIONA
+    private void vueltoMouseClicked(MouseEvent evt) { //* RECUPERAR VUELTO */
+        comp.getVuelto(exp);
     }
+    
     private void depCompraMouseEntered(MouseEvent evt) {
         exp.depCompraMouseEntered(evt);
     }
     private void depCompraMouseExited(MouseEvent evt) {
         exp.depCompraMouseExited(evt);
     }
-    private void depCompraMouseClicked(MouseEvent evt) {
-        System.out.println("SEXOOOOOOOOOOOOOOOOOOO"); //! ESTA WEA NO FUNCIONA TAMPOCO
+    private void depCompraMouseClicked(MouseEvent evt) { //* RECOGER COMPRA */
+        comp.getBebida(exp);
     }
 
     @Override

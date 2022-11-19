@@ -13,27 +13,30 @@ import javax.swing.JLabel;
  * //TODO:(METODO CREADO, PERO CON FALLAS) HACER QUE RECIBA LA MONEDA Y DESPUES SE COMPRE CON ELLA   
  * (NO QUE SE COMPRE EN EL MOMENTO CON ELLA, DE MANERA QUE SE MUESTRE EN LA PANTALLA EL DINERO INGRESADO ANTES DE COMPRAR)
  * //TODO:(LISTO) HACER QUE LA PANTALLA SUPERIOR VAYA CAMBIANDO DURANTE EL PROCESO DE COMPRA (MENSAJITOS)
- * //TODO: QUE SE DIBUJO UNA BEBIDA EN DEPOSITO DE COMPRA CUANDO COMPRE UNA BEBIDA (DESAPARECE CUANDO LA TOMA EL COMPRADOR)
  * //TODO: PEQUEÑA ANIMACION DE BEBIDAS CAYENDO CUANDO SACAS UNA DE UN DEPOSITO (REALIZAR CAMBIO EN DEPOSITOS)
  */
 
 public class Expendedor extends JPanel {
-    private int precio, dineroIngresado;
-
+    private int precio;
     private ArrayList<DepositoBebida> depBebidas;
     private int capacidadDeps;
     private int[] seriesCont;
-    public int bebidaseleccionada;
 
     private Bebida compra;
-    private DepositoMoneda depMonedas, depVuelto;
-    private JLabel pantallaSuperior, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita,pantallaInfoSuperior;
+    private Moneda monedaDeCompra;
+    private DepositoMoneda depMonedasDeCompras, depVuelto;
+
+    private JLabel infoPantallaSuperior, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita, pantallaSuperior;
     private ImageIcon[][] imagenes;
 
+    //* Constructor */
     public Expendedor(int cantBebidas, int precioUnico, int xPos, int yPos) {
-        super(null);
+        super();
 
+        //* Inicializar componentes del expendedor */
         this.precio = precioUnico;
+        this.capacidadDeps = cantBebidas;
+
         this.depBebidas = new ArrayList<DepositoBebida>(3);
         depBebidas.add(new DepositoBebida(20, 85));
         depBebidas.add(new DepositoBebida(120, 85));
@@ -41,18 +44,15 @@ public class Expendedor extends JPanel {
         this.add(depBebidas.get(0));
         this.add(depBebidas.get(1));
         this.add(depBebidas.get(2));
-        
         this.seriesCont = new int[]{1000,2000,3000};
-        for (int i = 0; i < cantBebidas; i++) {
+        for (int i = 0; i < capacidadDeps; i++) {
             depBebidas.get(0).addBebida(new CocaCola(seriesCont[0]++));
-            depBebidas.get(1).addBebida(new Fanta(seriesCont[1]++));
-            depBebidas.get(2).addBebida(new Sprite(seriesCont[2]++));
+            depBebidas.get(1).addBebida(new Sprite(seriesCont[1]++));
+            depBebidas.get(2).addBebida(new Fanta(seriesCont[2]++));
         }
-        
-        //* Nuevo, por enunciado
-        this.capacidadDeps = cantBebidas;
         this.depVuelto = new DepositoMoneda();
-        this.depMonedas = new DepositoMoneda();
+        this.depMonedasDeCompras = new DepositoMoneda();
+        this.monedaDeCompra = null;
         this.compra = null;
 
         //* Inicializar imagenes
@@ -68,14 +68,13 @@ public class Expendedor extends JPanel {
         };
 
         //* Configurar este panel
+        this.setLayout(null);
         this.setBounds(xPos, yPos, imgBase.getIconWidth(), imgBase.getIconHeight());
         this.setOpaque(false);
 
         //* Configurar JComponents
         JLabel base = new JLabel(imgBase);
         base.setBounds(0, 0, imgBase.getIconWidth(), imgBase.getIconHeight());
-        
-        
         
         pantallaSuperior = new JLabel(imagenes[3][0]);
         pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
@@ -88,22 +87,25 @@ public class Expendedor extends JPanel {
             public void mouseExited(MouseEvent evt) {
                 pantallaSuperiorMouseExited(evt);
             }
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                pantallaSuperiorMouseCliked(evt);
+            }
         });
-       
         
+        infoPantallaSuperior = new JLabel();
+        infoPantallaSuperior.setText("Bienvenido!");
+        infoPantallaSuperior.setFont(new Font("Arial", Font.PLAIN, 20));
+        infoPantallaSuperior.setForeground(Color.WHITE);
+        infoPantallaSuperior.setSize(1000, 20);
+        infoPantallaSuperior.setLocation(40, 40);
+
         infoPantallita = new JLabel();
-        infoPantallita.setText("");
+        infoPantallita.setText("$ 0");
         infoPantallita.setFont(new Font("Arial", Font.PLAIN, 20));
         infoPantallita.setForeground(Color.WHITE);
         infoPantallita.setSize(100, 20);
         infoPantallita.setLocation(325, 130);
-        
-        pantallaInfoSuperior = new JLabel();
-        pantallaInfoSuperior.setText("");
-        pantallaInfoSuperior.setFont(new Font("Arial", Font.PLAIN, 20));
-        pantallaInfoSuperior.setForeground(Color.WHITE);
-        pantallaInfoSuperior.setSize(1000, 20);
-        pantallaInfoSuperior.setLocation(40, 40);
 
         insertar = new JLabel(imagenes[4][0]);
         insertar.setBounds(320, 170, insertar.getIcon().getIconWidth(), insertar.getIcon().getIconHeight());
@@ -118,7 +120,6 @@ public class Expendedor extends JPanel {
             }
         });
 
-        // Boton CocaCola
         logoCocacola = new JLabel(imagenes[0][0]);
         logoCocacola.setBounds(318, 222, logoCocacola.getIcon().getIconWidth(), logoCocacola.getIcon().getIconHeight());
         logoCocacola.addMouseListener(new MouseAdapter() {
@@ -132,7 +133,6 @@ public class Expendedor extends JPanel {
             }
         });
         
-        // Boton Sprite
         logoSprite = new JLabel(imagenes[1][0]);
         logoSprite.setBounds(318, 258, logoSprite.getIcon().getIconWidth(), logoSprite.getIcon().getIconHeight());
         logoSprite.addMouseListener(new MouseAdapter() {
@@ -145,7 +145,7 @@ public class Expendedor extends JPanel {
                 logoSpriteMouseExited(evt);
             }
         });
-        // Boton Fanta 
+
         logoFanta = new JLabel(imagenes[2][0]);
         logoFanta.setBounds(318, 294, logoFanta.getIcon().getIconWidth(), logoFanta.getIcon().getIconHeight());
         logoFanta.addMouseListener(new MouseAdapter() {
@@ -185,11 +185,11 @@ public class Expendedor extends JPanel {
             }
         });
 
-        // Agregar todo
+        // Agregar todo al JPanel
         this.add(depBebidas.get(0));
         this.add(depBebidas.get(1));
         this.add(depBebidas.get(2));
-        this.add(pantallaInfoSuperior);
+        this.add(infoPantallaSuperior);
         this.add(pantallaSuperior);
         this.add(infoPantallita);
         this.add(insertar);
@@ -202,15 +202,14 @@ public class Expendedor extends JPanel {
     }
     
     //* Cambiar informacion mostrada en pantalla de expendedor */
-    public void cambiarContDinero(String monea) {
+    private void updateInfoPantallita(String monea) {
         infoPantallita.setText(monea);
     }
-    
-    public void cambiarInfoPantallaSup(String info) {
-        pantallaInfoSuperior.setText(info);
+    private void updateInfoPantallaSup(String info) {
+        infoPantallaSuperior.setText(info);
     }
 
-    //* Funciones para obterner coordenadas y areas de Jlabels */
+    //* Funciones para obterner coordenadas y tamaño de Jlabels */
     public Rectangle getInsertarBounds() {
         return insertar.getBounds();
     }
@@ -220,22 +219,36 @@ public class Expendedor extends JPanel {
     public Rectangle getDepCompraBounds() {
         return depCompra.getBounds();
     }
+    public Rectangle getCocacolaBounds() {
+        return logoCocacola.getBounds();
+    }
+    public Rectangle getSpriteBounds() {
+        return logoSprite.getBounds();
+    }
+    public Rectangle getFantaBounds() {
+        return logoFanta.getBounds();
+    }
 
-    public void comprarBebida(Moneda m, int num) {  //* Modificado para compatibilizar con enunciado de la tarea3
+    //* Logica del expendedor */
+    public void comprarBebida(int num) {  //! Modificado para compatibilizar con enunciado de la tarea3
         boolean devolverMoneda = false; // Flag para verificar si hay devolucion o no
 
         try {
             // * Se ingreso una moneda?
-            if (m == null) {
-                compra = null;
+            if (monedaDeCompra == null) {
                 throw new PagoIncorrectoException("No se ingreso moneda.");
+
             // * Ya había otra compra en proceso?
             } else if (compra != null) {
+                this.updateInfoPantallaSup("Recoja compra anterior antes de continuar.");
+
                 devolverMoneda = true;
                 throw new CompraEnProcesoException("Recoja su anterior compra antes de realizar otra.");
+            
+            // * Seguir con proceso de compra
             } else {
                 // Si el valor de la moneda alcanza para comprar bebida
-                if (m.getValor() >= precio) {
+                if (monedaDeCompra.getValor() >= precio) {
                     // Pad numérico
                     switch (num) {
                         case 1: compra = depBebidas.get(0).getBebida(); break;
@@ -250,23 +263,34 @@ public class Expendedor extends JPanel {
                     if (compra == null) {
                         devolverMoneda = true;
                         throw new NoHayBebidaException("No quedan bebidas en el deposito del expendedor.");
-                    // En caso de compra exitosa
+
+                    //* En caso de compra exitosa
                     } else {
+                        this.updateInfoPantallaSup("Compra exitosa, disfrute!");
+
                         //* Posicionar compra en deposito de compra y agregar a GUI
-                        compra.setXY(340, 433);
+                        compra.setXY(340, 438);
+                        compra.setVisible(true);
                         this.add(compra);
+                        this.setComponentZOrder(compra, 0);
+                        this.updateUI();
 
                         // Si la moneda tenia una valor mayor entonces se calcula vuelto
-                        if (m.getValor() > precio) {
-                            int vuelto = m.getValor() - precio;
+                        if (monedaDeCompra.getValor() > precio) {
+                            int vuelto = monedaDeCompra.getValor() - precio;
                             for (int i = 0; i < vuelto/100; i++) {
-                                depVuelto.addMoneda(new Moneda100());
+                                depVuelto.addMoneda(new Moneda100(false));
                             }
                         }
-                        depMonedas.addMoneda(m); //* Guardar moneda
+
+                        //* Guardar moneda y actualizar pantalla
+                        this.updateInfoPantallita("$ 0");
+                        depMonedasDeCompras.addMoneda(monedaDeCompra); //* Guardar moneda
+                        monedaDeCompra = null;
                     }
                 // En el caso de que no alcance la moneda
                 } else {
+                    this.updateInfoPantallaSup("Valor insuficiente, moneda devuelta.");
                     devolverMoneda = true;
                     throw new PagoInsuficienteException("Pago insuficiente.");
                 }
@@ -276,18 +300,25 @@ public class Expendedor extends JPanel {
         }
 
         if (devolverMoneda) {
-            depVuelto.addMoneda(m);
+            depVuelto.addMoneda(monedaDeCompra);
             System.out.println("Moneda devuelta.");
         }
     }
     public Bebida getBebida() {
-        Bebida aux = compra;
-        compra = null;
-        this.remove(compra);
+        if (compra != null) {
+            System.out.println("Compra recogida desde expendedor.");
 
-        return aux;
+            compra.setVisible(false);
+            this.remove(compra);
+            this.updateUI();
+            Bebida aux = compra;
+            compra = null;
+            return aux;
+        } else {
+            return null;
+        }
     }
-    public void refillDep() {   //* Rellenar depósitos vacíos
+    public void refillDep() {   //TODO: Crear funcion de rellenado en la clase DepositoBebida
         System.out.println("Rellenando depositos vacios...");
 
         for (int i = 0; i < 3; i++) {
@@ -304,12 +335,23 @@ public class Expendedor extends JPanel {
                 }
             }
         }
+        this.updateUI();
     }
     public Moneda getVuelto() {
         return depVuelto.getMoneda();
     }
-    public void recibirMoneda(Moneda x) {
-        depMonedas.addMoneda(x);
+    public void ingresarMoneda(Moneda m) {   
+        if (monedaDeCompra != null) {
+            updateInfoPantallaSup("Terminar compra en proceso.");
+            System.out.println("Moneda ingresada devuelta.");
+
+            depVuelto.addMoneda(monedaDeCompra);
+        } else {
+            updateInfoPantallaSup("Moneda de $"+m.getValor()+" ingresada.");
+            updateInfoPantallita("$"+m.getValor());
+
+            this.monedaDeCompra = m;
+        }
     }
     
     //* Administracion de eventos */
@@ -319,40 +361,49 @@ public class Expendedor extends JPanel {
     private void pantallaSuperiorMouseExited(MouseEvent evt) {
         pantallaSuperior.setIcon(imagenes[3][0]);
     }
+    private void pantallaSuperiorMouseCliked(MouseEvent evt) {
+        this.refillDep();
+    }
+    
     public void insertarMouseEntered(MouseEvent evt) {                                          
         insertar.setIcon(imagenes[4][1]);
     }
     public void insertarMouseExited(MouseEvent evt) {
         insertar.setIcon(imagenes[4][0]);
     }
+    
     public void vueltoMouseEntered(MouseEvent evt) {                                          
         vuelto.setIcon(imagenes[5][1]);
     }
     public void vueltoMouseExited(MouseEvent evt) {
         vuelto.setIcon(imagenes[5][0]);
     }
+    
     public void depCompraMouseEntered(MouseEvent evt) {                                          
         depCompra.setIcon(imagenes[6][1]);
     }
     public void depCompraMouseExited(MouseEvent evt) {
         depCompra.setIcon(imagenes[6][0]);
     }
-    private void logoCocacolaMouseEntered(MouseEvent evt) {                                          
+    
+    public void logoCocacolaMouseEntered(MouseEvent evt) {                                          
         logoCocacola.setIcon(imagenes[0][1]);
     }
-    private void logoCocacolaMouseExited(MouseEvent evt) {
+    public void logoCocacolaMouseExited(MouseEvent evt) {
         logoCocacola.setIcon(imagenes[0][0]);
     }
-    private void logoSpriteMouseEntered(MouseEvent evt) {
+    
+    public void logoSpriteMouseEntered(MouseEvent evt) {
         logoSprite.setIcon(imagenes[1][1]);
     }
-    private void logoSpriteMouseExited(MouseEvent evt) {
+    public void logoSpriteMouseExited(MouseEvent evt) {
         logoSprite.setIcon(imagenes[1][0]);
     }
-    private void logoFantaMouseEntered(MouseEvent evt) {
+    
+    public void logoFantaMouseEntered(MouseEvent evt) {
         logoFanta.setIcon(imagenes[2][1]);
     }
-    private void logoFantaMouseExited(MouseEvent evt) {
+    public void logoFantaMouseExited(MouseEvent evt) {
         logoFanta.setIcon(imagenes[2][0]);
     }
 }

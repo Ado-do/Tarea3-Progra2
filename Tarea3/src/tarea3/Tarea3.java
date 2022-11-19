@@ -1,12 +1,12 @@
 package tarea3;
 
-/* TO-DO LIST
- * - Abrir una ventana
- * - Dibujar expendedor
+/* //! NOMBRES:
+ * Alonso Bustos
+ * Cristobal Figueroa
  */
 
 public class Tarea3 {
     public static void main(String[] args) {
-        Ventana v = new Ventana();
+        new Ventana();
     }
 }

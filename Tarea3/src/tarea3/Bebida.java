@@ -1,5 +1,6 @@
 package tarea3;
 
+import java.awt.event.*;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -10,12 +11,22 @@ public abstract class Bebida extends JLabel {
         super();
 
         this.serie = serie;
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                bebidaMouseClicked(evt);
+            }
+        });
     }
     public int getSerie() {
         return serie;
     }
     public void setXY(int xPos, int yPos) {
         this.setLocation(xPos, yPos);
+    }
+
+    public void bebidaMouseClicked(MouseEvent evt) {
+        System.out.println("Serie de bebida clickeada: " + this.getSerie());
     }
 
     public abstract String beber();
