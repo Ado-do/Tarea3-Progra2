@@ -2,3 +2,6 @@
 ### Equipo
 * Alonso Bustos (Ado-do)
 * Cristobal Figueroa (xKroZzar)
+
+# Imagen GUI
+![IMG](diseño/imgGUI.png)
