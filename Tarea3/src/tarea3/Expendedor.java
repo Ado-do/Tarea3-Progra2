@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -19,7 +20,7 @@ public class Expendedor extends JPanel {
     private Moneda monedaDeCompra;
     private DepositoMoneda depMonedasDeCompras, depVuelto;
 
-    private JLabel infoPantallaSuperior, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra,infoPantallita, pantallaSuperior;
+    private JLabel pantallaSuperior, infoPantallaSuperior, infoPantallita, insertar, logoCocacola, logoSprite, logoFanta, vuelto, depCompra;
     private ImageIcon[][] imagenes;
 
     //* Constructor */
@@ -71,27 +72,29 @@ public class Expendedor extends JPanel {
         
         pantallaSuperior = new JLabel(imagenes[3][0]);
         pantallaSuperior.setBounds(19, 18, pantallaSuperior.getIcon().getIconWidth(), pantallaSuperior.getIcon().getIconHeight());
-        pantallaSuperior.addMouseListener(new MouseAdapter() { // Se creara una clase con literal
+        pantallaSuperior.addMouseListener(new MouseAdapter() {
+            private String aux;
             @Override
             public void mouseEntered(MouseEvent evt) {
-                pantallaSuperiorMouseEntered(evt);
+                aux = infoPantallaSuperior.getText();
+                actualizarInfoPantallaSup("Click para rellenar depositos vacios!");
+                pantallaSuperior.setIcon(imagenes[3][1]);
             }
             @Override
             public void mouseExited(MouseEvent evt) {
-                pantallaSuperiorMouseExited(evt);
+                actualizarInfoPantallaSup(aux);
+                pantallaSuperior.setIcon(imagenes[3][0]);
             }
             @Override
             public void mouseClicked(MouseEvent evt) {
-                pantallaSuperiorMouseCliked(evt);
+                refillDep();
             }
         });
-        
-        infoPantallaSuperior = new JLabel();
-        infoPantallaSuperior.setText("Bienvenido!");
+
+        infoPantallaSuperior = new JLabel("Bienvenido! El precio es: $"+precio, SwingConstants.CENTER);
         infoPantallaSuperior.setFont(new Font("Arial", Font.PLAIN, 20));
         infoPantallaSuperior.setForeground(Color.WHITE);
-        infoPantallaSuperior.setSize(1000, 20);
-        infoPantallaSuperior.setLocation(40, 40);
+        infoPantallaSuperior.setBounds(pantallaSuperior.getBounds());
 
         infoPantallita = new JLabel();
         infoPantallita.setText("$ 0");
@@ -195,14 +198,14 @@ public class Expendedor extends JPanel {
     }
     
     //* Cambiar informacion mostrada en pantalla de expendedor */
-    private void updateInfoPantallita(String monea) {
+    private void actualizarInfoPantallita(String monea) {
         infoPantallita.setText(monea);
     }
-    private void updateInfoPantallaSup(String info) {
+    private void actualizarInfoPantallaSup(String info) {
         infoPantallaSuperior.setText(info);
     }
 
-    //* Funciones para obterner coordenadas y tamaño de Jlabels */
+    //* Geters y booleans(?) */
     public Rectangle getInsertarBounds() {
         return insertar.getBounds();
     }
@@ -221,19 +224,26 @@ public class Expendedor extends JPanel {
     public Rectangle getFantaBounds() {
         return logoFanta.getBounds();
     }
+    public boolean hayCompra() {
+        return (compra != null) ? true : false;
+    }
+    public boolean hayVuelto() {
+        return (!depVuelto.isEmpty()) ? true : false; 
+    }
 
     //* Logica del expendedor */
-    public void comprarBebida(int num) {  //! Modificado para compatibilizar con enunciado de la tarea3
+    public void comprarBebida(int num) {
         boolean devolverMoneda = false; // Flag para verificar si hay devolucion o no
 
         try {
             // * Se ingreso una moneda?
             if (monedaDeCompra == null) {
+                this.actualizarInfoPantallaSup("No se ingreso una moneda.");
                 throw new PagoIncorrectoException("No se ingreso moneda.");
 
             // * Ya había otra compra en proceso?
             } else if (compra != null) {
-                this.updateInfoPantallaSup("Recoja su compra para continuar");
+                this.actualizarInfoPantallaSup("Recoja su compra para continuar");
 
                 devolverMoneda = true;
                 throw new CompraEnProcesoException("Recoja su anterior compra antes de realizar otra.");
@@ -259,7 +269,7 @@ public class Expendedor extends JPanel {
 
                     //* En caso de compra exitosa
                     } else {
-                        this.updateInfoPantallaSup("Compra exitosa, disfrute!");
+                        this.actualizarInfoPantallaSup("Compra exitosa, recoja bebida.");
 
                         //* Posicionar compra en deposito de compra y agregar a GUI
                         compra.setXY(340, 438);
@@ -277,13 +287,13 @@ public class Expendedor extends JPanel {
                         }
 
                         //* Guardar moneda y actualizar pantalla
-                        this.updateInfoPantallita("$ 0");
+                        this.actualizarInfoPantallita("$ 0");
                         depMonedasDeCompras.addMoneda(monedaDeCompra); //* Guardar moneda
                         monedaDeCompra = null;
                     }
                 // En el caso de que no alcance la moneda
                 } else {
-                    this.updateInfoPantallaSup("Valor insuficiente, moneda devuelta.");
+                    this.actualizarInfoPantallaSup("Valor insuficiente, moneda devuelta.");
                     devolverMoneda = true;
                     throw new PagoInsuficienteException("Pago insuficiente.");
                 }
@@ -293,7 +303,7 @@ public class Expendedor extends JPanel {
         }
 
         if (devolverMoneda) {
-            this.updateInfoPantallita("$ 0");
+            this.actualizarInfoPantallita("$ 0");
 
             depVuelto.addMoneda(monedaDeCompra);
             monedaDeCompra = null;
@@ -302,6 +312,7 @@ public class Expendedor extends JPanel {
     }
     public Bebida getBebida() {
         if (compra != null) {
+            actualizarInfoPantallaSup("Gracias por su compra, disfrute!");
             System.out.println("Compra recogida desde expendedor.");
 
             compra.setVisible(false);
@@ -314,7 +325,7 @@ public class Expendedor extends JPanel {
             return null;
         }
     }
-    public void refillDep() {   //TODO: Crear funcion de rellenado en la clase DepositoBebida
+    public void refillDep() {
         System.out.println("Rellenando depositos vacios...");
 
         for (int i = 0; i < 3; i++) {
@@ -338,34 +349,19 @@ public class Expendedor extends JPanel {
     }
     public void ingresarMoneda(Moneda m) {   
         if (monedaDeCompra != null) {
-            updateInfoPantallaSup("Terminar compra en proceso.");
+            actualizarInfoPantallaSup("Terminar compra en proceso.");
             System.out.println("Moneda ingresada devuelta.");
 
             depVuelto.addMoneda(monedaDeCompra);
         } else {
-            updateInfoPantallaSup("Moneda de $"+m.getValor()+" ingresada.");
-            updateInfoPantallita("$"+m.getValor());
+            actualizarInfoPantallaSup("Moneda ingresada, haga su elección.");
+            actualizarInfoPantallita("$"+m.getValor());
 
             this.monedaDeCompra = m;
         }
     }
-    public boolean hayCompra() {
-        return (compra != null) ? true : false;
-    }
-    public boolean hayVuelto() {
-        return (!depVuelto.isEmpty()) ? true : false; 
-    }
     
     //* Administracion de eventos */
-    private void pantallaSuperiorMouseEntered(MouseEvent evt) {                                          
-        pantallaSuperior.setIcon(imagenes[3][1]);
-    }
-    private void pantallaSuperiorMouseExited(MouseEvent evt) {
-        pantallaSuperior.setIcon(imagenes[3][0]);
-    }
-    private void pantallaSuperiorMouseCliked(MouseEvent evt) {
-        this.refillDep();
-    }
     
     public void insertarMouseEntered(MouseEvent evt) {                                          
         insertar.setIcon(imagenes[4][1]);

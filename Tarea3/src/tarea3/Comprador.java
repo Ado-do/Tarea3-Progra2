@@ -5,14 +5,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/* //! WEAS POR HACER (ATENTO KROSSITO)
- * //TODO: DIBUJAR (PONER IMAGENES) DE LOS INVENTARIOS
- * (OPCIONAL) MOSTRAR UN TEXTO DE QUE SE TOMO UNA BEBIDA CUANDO CLIKEA UNA BEBIDA DEL INVENTARIO Y Q DESAPARESCA
- * (OPCIONAL) HACER QUE INVENTARIO SE ABRA Y CIERRE SI CLICKEAS EN EL BOLSILLO Y LA CESTA (INDICAR CON FLECHAS O ALGUNA WEA)
- * 
- * //TODO HACER QUE COMPRADOR PRESIONE LOS BOTONES, (USAR SUS METODOS DE COMPRA, QUE EL INGRESE LA MONEDA)
- */
-
 public class Comprador extends JPanel { //* Adaptado para hacer varias compras
     private ArrayList<Bebida> compras;
     private ArrayList<Moneda> monederoVuelto;
@@ -57,18 +49,6 @@ public class Comprador extends JPanel { //* Adaptado para hacer varias compras
         }
     }
     
-    public void setMoneda(Moneda m) {
-        if (tieneMonedaParaComprar()) remove(monedaParaCompra);
-
-        monedaParaCompra = m;
-        monedaParaCompra.setLocation(20, 255);
-        monedaParaCompra.setVisible(true);
-        this.add(monedaParaCompra);
-        this.setComponentZOrder(monedaParaCompra, 0);
-
-        this.updateUI();
-    }
-    
     public void getVuelto(Expendedor exp) {
         boolean quedaVuelto = true;
         do {
@@ -82,6 +62,18 @@ public class Comprador extends JPanel { //* Adaptado para hacer varias compras
         } while (quedaVuelto);
     }
 
+    public void setMoneda(Moneda m) {
+        if (tieneMonedaParaComprar()) remove(monedaParaCompra);
+
+        monedaParaCompra = m;
+        monedaParaCompra.setLocation(20, 255);
+        monedaParaCompra.setVisible(true);
+        this.add(monedaParaCompra);
+        this.setComponentZOrder(monedaParaCompra, 0);
+
+        this.updateUI();
+    }
+
     public void ingresarMoneda(Expendedor exp) {
         if (monedaParaCompra != null) {
             monedaParaCompra.setVisible(false);
@@ -92,9 +84,13 @@ public class Comprador extends JPanel { //* Adaptado para hacer varias compras
     }
     
     public boolean tieneMonedaParaComprar() {
-        return (monedaParaCompra != null) ? true : false;
+        return ((monedaParaCompra != null) ? true : false);
     }
    
+    public void vaciarMonedero() {
+        monederoVuelto.clear();
+    }
+
     public String beberBebida(int index) {
         return compras.remove(index).beber();
     }
