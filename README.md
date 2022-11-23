@@ -5,3 +5,6 @@
 
 # Imagen GUI
 ![IMG](diseño/imgGUI.png)
+
+# Imagen UML
+![UML](diseño/UML.png)
